@@ -52,3 +52,5 @@ function main()
         print(files)
     end
 end
+
+main()
