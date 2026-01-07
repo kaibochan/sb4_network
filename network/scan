@@ -63,8 +63,8 @@ function scan.index_files(files)
 
     for file in files do
         for word in get_words_in(file) do
-            if ~index[word] then
-                table.insert(index, word, {})
+            if not index[word] then
+                index[word] = {}
             end
             table.insert(index[word], file)
         end
