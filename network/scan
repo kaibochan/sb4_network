@@ -1,0 +1,54 @@
+function get_all_drives()
+    all_drives = {}
+
+    names = peripheral.getNames()
+    for _, name in ipairs(names) do
+        p_type = peripheral.getType(name)
+        if p_type == "drive" then
+            table.insert(all_drives, peripheral.wrap(name))
+        end
+    end
+
+    return all_drives
+end
+
+function get_all_mount_paths(drives)
+    all_mount_paths = {}
+
+    for _, drive in drives do
+        table.insert(all_mount_paths, insert(drive.getMountPath()))
+    end
+
+    return all_mount_paths
+end
+
+function scan_all_files(network_paths)
+    network_files = {}
+
+    frontier = {}
+    for _, path in ipairs(network_paths) do
+        table.insert(frontier, path)
+    end
+
+    for _, f in ipairs(fs.list(frontier[1])) do
+        if fs.isDir(f) then
+            table.insert(frontier, frontier[1].."/"..f)
+        else
+            table.insert(network_files, frontier[1].."/"..f)
+        end
+    end
+
+    return network_files
+end
+
+function main()
+    drives = get_all_drives()
+    paths = get_all_mount_paths(drives)
+    
+    index_file = fs.open("index.dat", "w")
+    files = scan_all_files(paths)
+
+    for _, file in ipairS(files) do
+        print(files)
+    end
+end
