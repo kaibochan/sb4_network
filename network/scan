@@ -1,4 +1,6 @@
-function get_all_drives()
+local scan = {}
+
+function scan.get_drives()
     all_drives = {}
 
     names = peripheral.getNames()
@@ -12,7 +14,7 @@ function get_all_drives()
     return all_drives
 end
 
-function get_all_mount_paths(drives)
+function scan.get_mount_paths(drives)
     all_mount_paths = {}
 
     for _, drive in ipairs(drives) do
@@ -22,7 +24,7 @@ function get_all_mount_paths(drives)
     return all_mount_paths
 end
 
-function scan_all_files(network_paths)
+function scan.find_files(network_paths)
     network_files = {}
 
     frontier = {}
@@ -46,16 +48,44 @@ function scan_all_files(network_paths)
     return network_files
 end
 
-function main()
-    drives = get_all_drives()
-    paths = get_all_mount_paths(drives)
-    
-    index_file = fs.open("index.dat", "w")
-    files = scan_all_files(paths)
-
-    for _, file in ipairs(files) do
-        print(file)
+local function get_words_in(file_path)
+    words = {}
+    for line in io.lines(file_path) do
+        for word in line:gmatch("[%w]+") do
+            table.insert(words, word:lower())
+        end
     end
+    return words
+end
+
+function scan.index_files(files)
+    index = {}
+
+    for file in files do
+        for word in get_words_in(file) do
+            if ~index[word] then
+                table.insert(index, word, {})
+            end
+            table.insert(index[word], file)
+        end
+    end
+
+    return index
+end
+
+function main()
+    drives = scan.get_drives()
+    paths = scan.get_mount_paths(drives)
+    
+    files = scan.find_files(paths)
+    index = scan.index_files(files)
+
+    print(textutils.serialise(index))
+    -- for _, file in ipairs(files) do
+    --     print(file)
+    -- end
 end
 
 main()
+
+return scan
