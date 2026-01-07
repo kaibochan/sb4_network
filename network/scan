@@ -16,7 +16,7 @@ function get_all_mount_paths(drives)
     all_mount_paths = {}
 
     for _, drive in ipairs(drives) do
-        table.insert(all_mount_paths, insert(drive.getMountPath()))
+        table.insert(all_mount_paths, drive.getMountPath())
     end
 
     return all_mount_paths
