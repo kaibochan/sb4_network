@@ -30,12 +30,16 @@ function scan_all_files(network_paths)
         table.insert(frontier, path)
     end
 
-    for _, f in ipairs(fs.list(frontier[1])) do
-        if fs.isDir(f) then
-            table.insert(frontier, frontier[1].."/"..f)
-        else
-            table.insert(network_files, frontier[1].."/"..f)
+    while #frontier ~= 0 do
+        for _, f in ipairs(fs.list(frontier[1])) do
+            if fs.isDir(f) then
+                table.insert(frontier, frontier[1].."/"..f)
+            else
+                table.insert(network_files, frontier[1].."/"..f)
+            end
         end
+
+        table.remove(frontier, 1)
     end
 
     return network_files
@@ -48,8 +52,8 @@ function main()
     index_file = fs.open("index.dat", "w")
     files = scan_all_files(paths)
 
-    for _, file in ipairS(files) do
-        print(files)
+    for _, file in ipairs(files) do
+        print(file)
     end
 end
 
