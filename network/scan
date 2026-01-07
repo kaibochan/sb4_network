@@ -32,10 +32,11 @@ function scan_all_files(network_paths)
 
     while #frontier ~= 0 do
         for _, f in ipairs(fs.list(frontier[1])) do
-            if fs.isDir(f) then
-                table.insert(frontier, frontier[1].."/"..f)
+            f_path = frontier[1].."/"..f
+            if fs.isDir(f_path) then
+                table.insert(frontier, f_path)
             else
-                table.insert(network_files, frontier[1].."/"..f)
+                table.insert(network_files, f_path)
             end
         end
 
