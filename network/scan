@@ -62,7 +62,7 @@ function scan.index_files(files)
     index = {}
 
     for _, file in ipairs(files) do
-        for word in get_words_in(file) do
+        for _, word in ipairs(get_words_in(file)) do
             if not index[word] then
                 index[word] = {}
             end
